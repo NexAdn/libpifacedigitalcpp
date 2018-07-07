@@ -1,0 +1,6 @@
+[submodule "3rdparty/libmcp23s17"]
+	path = 3rdparty/libmcp23s17
+	url = https://github.com/piface/libmcp23s17.git
+[submodule "3rdparty/libpifacedigital"]
+	path = 3rdparty/libpifacedigital
+	url = https://github.com/piface/libpifacedigital.git
