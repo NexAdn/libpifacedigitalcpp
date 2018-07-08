@@ -17,13 +17,24 @@ set(EXAMPLE_SOURCES
 
 
 set(INCLUDE_DIRS
-    "src"
+    "${libpifacedigital++_SOURCE_DIR}"
+    "${libpifacedigital++_SOURCE_DIR}/src"
+    "${libpifacedigital++_SOURCE_DIR}/3rdparty/libpifacedigital/src"
 )
-include_directories(${INCLUDE_DIRS})
+
+set(LINK_DIRS
+    "${libpifacedigital++_SOURCE_DIR}"
+    "${libpifacedigital++_SOURCE_DIR}/3rdparty/libmcp23s17"
+    "${libpifacedigital++_SOURCE_DIR}/3rdparty/libpifacedigital"
+)
 
 add_subdirectory(${libpifacedigital++_SOURCE_DIR}/3rdparty)
 
+include_directories(${INCLUDE_DIRS})
+link_directories(${LINK_DIRS})
+
 add_library(pifacedigital++ SHARED ${LIBRARY_SOURCES})
+target_link_libraries(pifacedigital++ pifacedigital mcp23s17)
 
 add_executable(example ${EXAMPLE_SOURCES})
 target_link_libraries(example pifacedigital++)
