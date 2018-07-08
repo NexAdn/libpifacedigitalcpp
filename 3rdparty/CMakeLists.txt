@@ -1,6 +1,5 @@
-message(STATUS "Creating libs")
+include_directories(libmcp23s17/src libpifacedigital/src)
 
-execute_process(COMMAND make WORKING_DIRECTORY ${libpifacedigital++_SOURCE_DIR}/3rdparty/libmcp23s17)
-execute_process(COMMAND make WORKING_DIRECTORY ${libpifacedigital++_SOURCE_DIR}/3rdparty/libpifacedigital)
-
-message(STATUS "Created libs")
+add_library(mcp23s17 STATIC libmcp23s17/src/mcp23s17.c)
+add_library(pifacedigital STATIC libpifacedigital/src/pifacedigital.c)
+target_link_libraries(pifacedigital mcp23s17)

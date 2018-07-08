@@ -24,8 +24,8 @@ set(INCLUDE_DIRS
 
 set(LINK_DIRS
     "${libpifacedigitalcpp_SOURCE_DIR}"
-    "${libpifacedigitalcpp_SOURCE_DIR}/3rdparty/libmcp23s17"
-    "${libpifacedigitalcpp_SOURCE_DIR}/3rdparty/libpifacedigital"
+    "${libpifacedigitalcpp_BINARY_DIR}"
+    "${libpifacedigitalcpp_BINARY_DIR}/3rdparty"
 )
 
 add_subdirectory(${libpifacedigitalcpp_SOURCE_DIR}/3rdparty)
