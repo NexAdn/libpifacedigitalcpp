@@ -5,7 +5,7 @@ project(libpifacedigital++)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_FLAGS "-Wall ${CMAKE_C_FLAGS} -std=gnu99 -fPIC")
-set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS} -std=c++14 -fPIC")
+set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS} -std=c++14 -fPIC -pthread")
 
 set(LIBRARY_SOURCES
     src/PiFace.cpp
