@@ -27,7 +27,7 @@ public:
 
 private:
     int spiFileDescriptor{-1};
-    uint8_t hardwareAddress{0x00};
+    uint8_t hardwareAddress;
 
     std::mutex pfdOutputMutex;
 

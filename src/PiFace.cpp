@@ -1,5 +1,7 @@
 #include "PiFace.hpp"
 
+#include <iostream>
+
 #include "pifacedigital.h"
 
 namespace pf
@@ -33,7 +35,7 @@ void PiFace::bulkSetOutput(uint8_t outputBits)
 
 bool PiFace::getInput(uint8_t inputNo) const
 {
-    return static_cast<bool>(pifacedigital_read_bit(inputNo, INPUT, this->hardwareAddress));
+    return pifacedigital_read_bit(inputNo, INPUT, this->hardwareAddress) > 0 ? true : false;
 }
 
 uint8_t PiFace::bulkGetInput() const
