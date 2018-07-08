@@ -42,69 +42,79 @@ int main(int argc, char** argv)
 
     std::cout << "Reading input state change events\n";
     bool run{true};
-    std::thread t1{[&run, &pf]() {
+    std::condition_variable cv1, cv2, cv3, cv4;
+    std::thread t1{[&run, &pf, &cv1]() {
         std::mutex mtx;
         std::unique_lock<std::mutex> lk{mtx};
-        std::condition_variable cv;
+        std::condition_variable& cv = cv1;
 
         pf.registerInputStateChangeNotifier(cv);
         while (run) {
-            cv.wait(lk, [&pf]() { return pf.getInput(0); });
-            std::cout << "Input 0 pressed\n";
-            cv.wait(lk, [&pf]() { return !pf.getInput(0); });
+            cv.wait(lk, [&pf, &run]() { return pf.getInput(0) || !run; });
+            if (pf.getInput(0))
+                std::cout << "Input 0 pressed\n";
+            cv.wait(lk, [&pf, &run]() { return !pf.getInput(0) || !run; });
             cv.notify_all();
         }
         pf.unregisterInputStateChangeNotifier(cv);
     }};
-    std::thread t2{[&run, &pf]() {
+    std::thread t2{[&run, &pf, &cv2]() {
         std::mutex mtx;
         std::unique_lock<std::mutex> lk{mtx};
-        std::condition_variable cv;
+        std::condition_variable& cv = cv2;
 
         pf.registerInputStateChangeNotifier(cv);
         while (run) {
-            cv.wait(lk, [&pf]() { return pf.getInput(1); });
-            std::cout << "Input 1 pressed\n";
-            cv.wait(lk, [&pf]() { return !pf.getInput(1); });
+            cv.wait(lk, [&pf, &run]() { return pf.getInput(1) || !run; });
+            if (pf.getInput(1))
+                std::cout << "Input 1 pressed\n";
+            cv.wait(lk, [&pf, &run]() { return !pf.getInput(1) || !run; });
             cv.notify_all();
         }
         pf.unregisterInputStateChangeNotifier(cv);
     }};
-    std::thread t3{[&run, &pf]() {
+    std::thread t3{[&run, &pf, &cv3]() {
         std::mutex mtx;
         std::unique_lock<std::mutex> lk{mtx};
-        std::condition_variable cv;
+        std::condition_variable& cv = cv3;
 
         pf.registerInputStateChangeNotifier(cv);
         while (run) {
-            cv.wait(lk, [&pf]() { return pf.getInput(2); });
-            std::cout << "Input 2 pressed\n";
-            cv.wait(lk, [&pf]() { return !pf.getInput(2); });
+            cv.wait(lk, [&pf, &run]() { return pf.getInput(2) || !run; });
+            if (pf.getInput(2))
+                std::cout << "Input 2 pressed\n";
+            cv.wait(lk, [&pf, &run]() { return !pf.getInput(2) || !run; });
+            cv.notify_all();
         }
         pf.unregisterInputStateChangeNotifier(cv);
     }};
-    std::thread t4{[&run, &pf]() {
+    std::thread t4{[&run, &pf, &cv4]() {
         std::mutex mtx;
         std::unique_lock<std::mutex> lk{mtx};
-        std::condition_variable cv;
+        std::condition_variable& cv = cv4;
 
         pf.registerInputStateChangeNotifier(cv);
         while (run) {
-            cv.wait(lk, [&pf]() { return pf.getInput(3); });
-            std::cout << "Input 3 pressed\n";
-            cv.wait(lk, [&pf]() { return !pf.getInput(3); });
+            cv.wait(lk, [&pf, &run]() { return pf.getInput(3) || !run; });
+            if (pf.getInput(3))
+                std::cout << "Input 3 pressed\n";
+            cv.wait(lk, [&pf, &run]() { return !pf.getInput(3) || !run; });
             cv.notify_all();
         }
         pf.unregisterInputStateChangeNotifier(cv);
     }};
 
-    std::cout << "Input listener running.\nPress enter to quit\n";
-    std::cin.get();
+    std::cout << "Input listener running.\nPress enter to quit.\n";
+    std::cin.ignore();
+    std::cout << "Quitting\n";
     run = false;
+    cv1.notify_all();
+    cv2.notify_all();
+    cv3.notify_all();
+    cv4.notify_all();
     jij(t1);
     jij(t2);
     jij(t3);
     jij(t4);
-
     std::cout << "Quit\n";
 }
